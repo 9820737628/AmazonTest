@@ -15,7 +15,7 @@
 			<class name="com.qa.tests.ProductTests"></class>
 		</classes>
 	</test>
-	<test name="iPhone11">
+	<!-- <test name="iPhone11">
 		<listeners>
 			<listener class-name="com.qa.listeners.TestListener" />
 		</listeners>
@@ -28,5 +28,5 @@
 			<class name="com.qa.tests.LoginTests"></class>
 			<class name="com.qa.tests.ProductTests"></class>
 		</classes>
-	</test>
+	</test> -->
 </suite> <!-- Suite -->

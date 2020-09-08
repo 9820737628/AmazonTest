@@ -11,27 +11,44 @@ import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 
 public class LoginPage extends BaseTest {
 	TestUtils utils = new TestUtils();
-	@AndroidFindBy (accessibility = "test-Username") 
-	@iOSXCUITFindBy (id = "test-Username")
+	
+	@AndroidFindBy (xpath = "//android.widget.ImageView[@content-desc=\"Continue in English\"]")
+	private MobileElement ContinueInEnglish;
+	
+	@AndroidFindBy (xpath = "//android.widget.Button[@text='Already a customer? Sign in']")
+	private MobileElement AlreadyAcustomerSignin;
+	
+	@AndroidFindBy (xpath = "//android.widget.EditText[@resource-id='ap_email_login']")
 	private MobileElement usernameTxtFld;
+	
+	@AndroidFindBy (xpath = "//android.widget.Button[@resource-id='continue']")
+	private MobileElement ContinueButton;
 
-	@AndroidFindBy (accessibility = "test-Password") 
-	@iOSXCUITFindBy (id = "test-Password")
+	@AndroidFindBy (xpath = "//android.widget.EditText[@text='Amazon password']")
 	private MobileElement passwordTxtFld;
 	
-	@AndroidFindBy (accessibility = "test-LOGIN") 
-	@iOSXCUITFindBy (id = "test-LOGIN")
+	@AndroidFindBy (xpath = "//android.widget.Button[@text='Login']")
 	private MobileElement loginBtn;
 	
-	@AndroidFindBy (xpath = "//android.view.ViewGroup[@content-desc=\"test-Error message\"]/android.widget.TextView") 
-	@iOSXCUITFindBy (xpath = "//XCUIElementTypeOther[@name=\"test-Error message\"]/child::XCUIElementTypeStaticText")
-	private MobileElement errTxt;
+public LoginPage ContinueInEnglish() {
+		click(ContinueInEnglish);
+		return this;
+	}	
+
+public LoginPage ClicExistingCustomerLogin() {
+	click(AlreadyAcustomerSignin);
+	return this;
+}
+
 	
 public LoginPage enterUserName(String username) {
 	clear(usernameTxtFld);	
 	sendKeys(usernameTxtFld, username, "login with " + username);
+	click(ContinueButton);
 	return this;
 }
+
+
 
 public LoginPage enterPassword(String password) {
 	clear(passwordTxtFld);
@@ -39,20 +56,17 @@ public LoginPage enterPassword(String password) {
 	return this;
 }
 
+
 public ProductsPage pressLoginBtn() {
 	click(loginBtn, "press login button");
 	return new ProductsPage();
 }
 
-public ProductsPage login(String username, String password) {
-	enterUserName(username);
-	enterPassword(password);
-	return pressLoginBtn();
-}
+//public ProductsPage login(String username, String password) {
+//	enterUserName(username);
+//	enterPassword(password);
+//	return pressLoginBtn();
+//}
 
-public String getErrTxt() {
-	String err = getText(errTxt, "error text is - ");
-	return err;
-}
 
 }

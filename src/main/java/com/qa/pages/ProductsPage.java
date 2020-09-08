@@ -11,36 +11,50 @@ import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 public class ProductsPage extends MenuPage {
 	TestUtils utils = new TestUtils();
 	
-	@AndroidFindBy (xpath = "//android.widget.ScrollView[@content-desc=\"test-PRODUCTS\"]/preceding-sibling::android.view.ViewGroup/android.widget.TextView") 
-	@iOSXCUITFindBy (xpath ="//XCUIElementTypeOther[@name=\"test-Toggle\"]/parent::*[1]/preceding-sibling::*[1]")
-	private MobileElement productTitleTxt;
+	@AndroidFindBy (xpath = "//android.widget.EditText[@text='Search']") 
+	private MobileElement SearcBox;
 	
-	@AndroidFindBy (xpath = "(//android.widget.TextView[@content-desc=\"test-Item title\"])[1]") 
-	@iOSXCUITFindBy (xpath = "(//XCUIElementTypeStaticText[@name=\"test-Item title\"])[1]")
-	private MobileElement SLBTitle;
+	@AndroidFindBy (xpath = "//android.widget.ListView/child::android.widget.LinearLayout/child::android.widget.LinearLayout[1]/child::android.widget.TextView[1]") 
+	private MobileElement ClickItems;
 	
-	@AndroidFindBy (xpath = "(//android.widget.TextView[@content-desc=\"test-Price\"])[1]") 
-	@iOSXCUITFindBy (xpath = "(//XCUIElementTypeStaticText[@name=\"test-Price\"])[1]")
-	private MobileElement SLBPrice;
+	@AndroidFindBy (xpath = "//android.widget.Button[@text='Use my current location']")
+	private MobileElement UseCurrenLocation;
 	
-public String getTitle() {
-	String title = getText(productTitleTxt, "product page title is - ");
-	return title;
+	@AndroidFindBy (xpath = "//android.widget.Button[@text='Allow access']")
+	private MobileElement Allowaccess;
+	
+	@AndroidFindBy (xpath = "//android.widget.Button[@text='ALLOW ONLY WHILE USING THE APP']")
+	private MobileElement ALLOWONLYWHILEUSINGTHEAPP;
+	
+	@AndroidFindBy (xpath = "//android.view.View/child::android.view.View[1]/following-sibling::android.view.View[1]/following-sibling::android.view.View[1]/child::android.view.View[1]")
+	private MobileElement SelectProduct;
+	
+	
+
+	
+public ProductsPage SearchProduts(String Products) {
+	sendKeys(SearcBox,Products);
+    return this;
 }
 
-public String getSLBTitle() {
-	String title = getText(SLBTitle, "title is - ");
-	return title;
+
+public ProductsPage ClickItem() {
+	click(ClickItems, "click item");
+	return this;
 }
 
-public String getSLBPrice() {
-	String price = getText(SLBPrice, "price is - ");
-	return price;
+public ProductsPage AllowedappuseCurrentLocation() {
+	click(UseCurrenLocation, "click UseCurrenLocation");
+	click(Allowaccess,"click allow access");
+	click(ALLOWONLYWHILEUSINGTHEAPP,"click ALLOW ONLY  WHILEUSING THEAPP");
+	return this;
 }
 
-public ProductDetailsPage pressSLBTitle() {
-	click(SLBTitle, "press SLB tile link");
-	return new ProductDetailsPage();
+public String SelectProduct() {
+	click(SelectProduct, "click SelectProduct");
+	String productName = SelectProduct.getText();
+	return productName;
 }
+
 
 }

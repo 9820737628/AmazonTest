@@ -117,15 +117,14 @@ public class BaseTest {
 		PageFactory.initElements(new AppiumFieldDecorator(getDriver()), this);
 	}
 	
-	@BeforeMethod
+	/*@BeforeMethod
 	public void beforeMethod() {
 		((CanRecordScreen) getDriver()).startRecordingScreen();
 	}
-	
+	*/
 	//stop video capturing and create *.mp4 file
-	@AfterMethod
+	/*@AfterMethod
 	public synchronized void afterMethod(ITestResult result) throws Exception {
-		String media = ((CanRecordScreen) getDriver()).stopRecordingScreen();
 		
 		Map <String, String> params = result.getTestContext().getCurrentXmlTest().getAllParameters();		
 		String dirPath = "videos" + File.separator + params.get("platformName") + "_" + params.get("deviceName") 
@@ -152,7 +151,7 @@ public class BaseTest {
 			}
 		}		
 	}
-	
+	*/
 	@BeforeSuite
 	public void beforeSuite() throws Exception, Exception {
 		ThreadContext.put("ROUTINGKEY", "ServerLogs");
@@ -208,8 +207,7 @@ public class BaseTest {
 	  "chromeDriverPort", "wdaLocalPort", "webkitDebugProxyPort"})
   @BeforeTest
   public void beforeTest(@Optional("androidOnly")String emulator, String platformName, String udid, String deviceName, 
-		  @Optional("androidOnly")String systemPort, @Optional("androidOnly")String chromeDriverPort, 
-		  @Optional("iOSOnly")String wdaLocalPort, @Optional("iOSOnly")String webkitDebugProxyPort) throws Exception {
+		  @Optional("androidOnly")String systemPort, @Optional("androidOnly")String chromeDriverPort) throws Exception {
 	  setDateTime(utils.dateTime());
 	  setPlatform(platformName);
 	  setDeviceName(deviceName);
@@ -264,17 +262,6 @@ public class BaseTest {
 				desiredCapabilities.setCapability("app", androidAppUrl);
 
 				driver = new AndroidDriver(url, desiredCapabilities);
-				break;
-			case "iOS":
-				desiredCapabilities.setCapability("automationName", props.getProperty("iOSAutomationName"));
-				String iOSAppUrl = getClass().getResource(props.getProperty("iOSAppLocation")).getFile();
-				utils.log().info("appUrl is" + iOSAppUrl);
-				desiredCapabilities.setCapability("bundleId", props.getProperty("iOSBundleId"));
-				desiredCapabilities.setCapability("wdaLocalPort", wdaLocalPort);
-				desiredCapabilities.setCapability("webkitDebugProxyPort", webkitDebugProxyPort);
-				desiredCapabilities.setCapability("app", iOSAppUrl);
-
-				driver = new IOSDriver(url, desiredCapabilities);
 				break;
 			default:
 				throw new Exception("Invalid platform! - " + platformName);
@@ -348,9 +335,6 @@ public class BaseTest {
 	  case "Android":
 		  txt = getAttribute(e, "text");
 		  break;
-	  case "iOS":
-		  txt = getAttribute(e, "label");
-		  break;
 	  }
 	  utils.log().info(msg + txt);
 	  ExtentReport.getTest().log(Status.INFO, msg);
@@ -371,17 +355,30 @@ public class BaseTest {
 						+ "new UiSelector().description(\"test-Price\"));");
   }
   
-  public void iOSScrollToElement() {
-	  RemoteWebElement element = (RemoteWebElement)getDriver().findElement(By.name("test-ADD TO CART"));
-	  String elementID = element.getId();
-	  HashMap<String, String> scrollObject = new HashMap<String, String>();
-	  scrollObject.put("element", elementID);
-//	  scrollObject.put("direction", "down");
-//	  scrollObject.put("predicateString", "label == 'ADD TO CART'");
-//	  scrollObject.put("name", "test-ADD TO CART");
-	  scrollObject.put("toVisible", "sdfnjksdnfkld");
-	  getDriver().executeScript("mobile:scroll", scrollObject);
-  }
+  
+  public static void swipeVerticallyUntill_found(ThreadLocal<AppiumDriver> driver,(MobileElement)String xpath, int intervalInMillis, int retryNumber)
+	{
+		int count = 1;
+		while (count <= retryNumber) {
+			try {
+				driver.findElement(By.xpath(xpath)).isDisplayed();
+			} catch (Exception e) {
+				Dimension d = driver.manage().window().getSize();
+
+				int x1 = (int) (d.getWidth() * 0.5D);
+				int y1 = (int) (d.getHeight() * 0.8D);
+
+				int x2 = (int) (d.getWidth() * 0.5D);
+				int y2 = (int) (d.getHeight() * 0.2D);
+
+				new TouchAction(driver).press(PointOption.point(x1, y1))
+						.waitAction(WaitOptions.waitOptions(Duration.ofSeconds(4L))).moveTo(PointOption.point(x2, y2))
+						.release().perform();
+
+				count++;
+			}
+		}
+	}
 
   @AfterTest
   public void afterTest() {

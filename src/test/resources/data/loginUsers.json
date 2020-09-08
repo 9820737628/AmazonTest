@@ -1,14 +1,15 @@
 {
-	"invalidUser":{
-		"username":"invalidusername",
-		"password":"secret_sauce"
-	},
-	"invalidPassword":{
-		"username":"standard_user",
-		"password":"invalidpassword"
-	},
 	"validUser":{
-		"username":"standard_user",
-		"password":"secret_sauce"
+		"username":"sachin.pitrub@gmail.com",
+		"password":"Sachin@1234"
+		
+	},
+	"ProductName":{
+		"Product":"65 inch TV "
+	
+	},
+	"Product":{
+		"Product_tV":"Sony Bravia"
+	
 	}
 }

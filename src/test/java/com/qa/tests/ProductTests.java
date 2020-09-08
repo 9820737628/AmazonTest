@@ -29,9 +29,8 @@ import org.testng.annotations.AfterClass;
 
 public class ProductTests extends BaseTest{
 	LoginPage loginPage;
-	ProductsPage productsPage;
-	SettingsPage settingsPage;
-	ProductDetailsPage productDetailsPage;
+	LoginPage productsPage;	
+	ProductsPage productpage;
 	JSONObject loginUsers;
 	TestUtils utils = new TestUtils();
 	
@@ -63,50 +62,27 @@ public class ProductTests extends BaseTest{
 	  public void beforeMethod(Method m) {
 		  utils.log().info("\n" + "****** starting test:" + m.getName() + "******" + "\n");
 		  loginPage = new LoginPage();		  
-		  productsPage = loginPage.login(loginUsers.getJSONObject("validUser").getString("username"), 
-				  loginUsers.getJSONObject("validUser").getString("password"));
+		  productsPage = loginPage.enterUserName(loginUsers.getJSONObject("validUser").getString("username"));
+		  productsPage = loginPage.enterUserName(loginUsers.getJSONObject("validUser").getString("password"));
 	  }
-
-	  @AfterMethod
-	  public void afterMethod() {
-		  settingsPage = productsPage.pressSettingsBtn();
-		  loginPage = settingsPage.pressLogoutBtn();
-	  }
+	
 	  
-	  @Test
-	  public void validateProductOnProductsPage() {
-		  SoftAssert sa = new SoftAssert();
-		  
-		  String SLBTitle = productsPage.getSLBTitle();
-		  sa.assertEquals(SLBTitle, getStrings().get("products_page_slb_title"));
-		  
-		  String SLBPrice = productsPage.getSLBPrice();
-		  sa.assertEquals(SLBPrice, getStrings().get("products_page_slb_price"));
-		  
-		  sa.assertAll();
-	  }
+	  
 	  
 	  @Test
 	  public void validateProductOnProductDetailsPage() {
+		  
+		  productpage.SearchProduts(loginUsers.getJSONObject("ProductName").getString("Product"));
+		  productpage.ClickItem();
+		  productpage.AllowedappuseCurrentLocation();
+		  String productName = productpage.SelectProduct();
+		  
 		  SoftAssert sa = new SoftAssert();
 		  
-		  productDetailsPage = productsPage.pressSLBTitle();
+		
+		  sa.assertEquals(productName, productName.contains(loginUsers.getJSONObject("Product").getString("Product_tV")));
 		  		  
-		  String SLBTitle = productDetailsPage.getSLBTitle();
-		  sa.assertEquals(SLBTitle, getStrings().get("product_details_page_slb_title"));
-		  		  
-		  if(getPlatform().equalsIgnoreCase("Android")) {
-			  String SLBPrice = productDetailsPage.scrollToSLBPriceAndGetSLBPrice();
-			  sa.assertEquals(SLBPrice, getStrings().get("product_details_page_slb_price"));  
-		  }
-		  if(getPlatform().equalsIgnoreCase("iOS")) {			  
-			  String SLBTxt = productDetailsPage.getSLBTxt();
-			  sa.assertEquals(SLBTxt, getStrings().get("product_details_page_slb_txt"));
-			  
-			  productDetailsPage.scrollPage();
-			  sa.assertTrue(productDetailsPage.isAddToCartBtnDisplayed());  
-		  }		  		  
-		  productsPage = productDetailsPage.pressBackToProductsBtn();
+		 
 		  
 		  sa.assertAll();
 	  }
