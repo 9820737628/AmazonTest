@@ -358,6 +358,8 @@ public class BaseTest {
   
   public static void swipeVerticallyUntill_found(ThreadLocal<AppiumDriver> driver,(MobileElement)String xpath, int intervalInMillis, int retryNumber)
 	{
+	  
+	  
 		int count = 1;
 		while (count <= retryNumber) {
 			try {
